@@ -1845,3 +1845,73 @@ mark,
     opacity: 1;
   }
 }
+
+/* ── Evidence Cards ── */
+.evidence-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  margin-bottom: 12px;
+  transition: all 0.2s ease;
+}
+
+.evidence-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.evidence-kw {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--accent-surface);
+  color: var(--accent-text);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.evidence-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 8px 0;
+  padding: 8px;
+  background: var(--surface-2);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.evidence-text mark {
+  background-color: var(--highlight-yellow);
+  padding: 2px 4px;
+  border-radius: 2px;
+  font-weight: 600;
+}
+
+.evidence-src {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pdf-link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.pdf-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
