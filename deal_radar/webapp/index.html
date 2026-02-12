@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#F3F5F9">
+  <title>Certina AI Deal Agent</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- ── Sidebar / Navigation (Desktop) ── -->
+    <nav class="sidebar">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <span class="logo-text">Certina AI Deal Agent</span>
+      </div>
+
+      <div class="nav-links">
+        <a href="javascript:void(0)" class="nav-item active" onclick="showDashboard(); return false;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+          Dashboard
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="showCompaniesTab(); return false;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          Companies
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="toggleChat(); return false;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+          AI Analyst
+        </a>
+      </div>
+    </nav>
+
+    <!-- ── Main Content Area ── -->
+    <!-- ── Dashboard View ── -->
+    <main class="main-content" id="dashboard-view">
+
+      <!-- Sticky Header -->
+      <header class="glass-header">
+        <div class="header-title">
+          <h1>Dashboard</h1>
+          <span class="date-badge" id="current-date">Today</span>
+        </div>
+        <div class="header-actions">
+          <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              class="search-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="search" placeholder="Search companies..." autocomplete="off">
+          </div>
+          <div class="filter-dropdown">
+            <select id="filter-type">
+              <option value="">All Signals</option>
+              <option value="carve_out">Carve-out</option>
+              <option value="loss_stress">Distress</option>
+              <option value="biz_services">Services</option>
+              <option value="external_revenue">Revenue</option>
+            </select>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-scroll">
+        <!-- KPI Widgets -->
+        <section class="kpi-section" id="kpi-bar">
+          <!-- Injected via JS -->
+        </section>
+
+        <!-- Company Grid -->
+        <section class="grid-section">
+          <div class="section-header">
+            <h2>Opportunities</h2>
+            <span class="count-badge" id="opp-count">0</span>
+          </div>
+          <div id="company-grid" class="company-grid">
+            <!-- Injected via JS -->
+          </div>
+        </section>
+
+        <div id="loading" class="loading-state">
+          <div class="spinner"></div>
+          <span>Loading Intelligence...</span>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ── Companies Tab (Search + Add) ── -->
+    <main class="main-content companies-view hidden">
+
+      <!-- Sticky Header -->
+      <header class="glass-header">
+        <div class="header-title">
+          <h1>Companies</h1>
+          <span class="date-badge" id="companies-date">Today</span>
+        </div>
+      </header>
+
+      <div class="content-scroll">
+        <!-- Search Intelligence Section -->
+        <section class="grid-section">
+          <div class="search-intel-box">
+            <div class="search-intel-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <h3>Search Intelligence</h3>
+            </div>
+            <div class="search-intel-input-group">
+              <input type="text" id="search-intelligence"
+                placeholder="e.g. 'carve-out in Germany', 'distressed tech companies', 'M&A activity 2024'..."
+                onkeypress="if(event.key==='Enter') searchIntelligence()">
+              <button class="btn-search-intel" onclick="searchIntelligence()">
+                <span id="search-btn-text">🔍 Search</span>
+                <span id="search-btn-spinner" style="display:none;">⚙️</span>
+              </button>
+            </div>
+            <div id="search-results" style="display:none; margin-top: 1.5rem;">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Add Company Section -->
+        <section class="grid-section">
+          <div class="add-company-box">
+            <div class="add-company-header">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+              <h3>Add Companies</h3>
+            </div>
+            <div id="add-company-input-section">
+              <div class="add-company-input-wrapper">
+                <div class="input-group">
+                  <label>Company Name</label>
+                  <div class="input-with-button">
+                    <input type="text" id="company-name-input" placeholder="e.g. 'SAP', 'Microsoft', 'Accenture'..."
+                      onkeypress="if(event.key==='Enter') addCompanyByName()">
+                    <button class="btn-primary" onclick="addCompanyByName()">
+                      <span id="add-btn-text">Add Company</span>
+                      <span id="add-btn-spinner" style="display:none;">⚙️ Searching...</span>
+                    </button>
+                  </div>
+                  <small style="color:var(--text-secondary); margin-top:0.5rem;">
+                    I'll automatically find the company's investor relations pages and financial reports.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div id="add-company-tasks-section" style="display:none;">
+              <h3>Processing Queue</h3>
+              <div id="tasks-list" class="tasks-list">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ── Detail Modal (Bottom Sheet on Mobile) ── -->
+  <div id="modal" class="modal-backdrop hidden">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <div class="drag-handle"></div> <!-- Mobile only -->
+        <div class="modal-title-bar">
+          <span id="modal-title">Company Name</span>
+          <button class="close-btn" onclick="closeModal()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="modal-content" class="modal-body">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Chat Overlay ── -->
+  <div id="chat-panel" class="chat-overlay hidden">
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="chat-title-group">
+          <div class="ai-avatar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"></path>
+              <path d="M12 22a2 2 0 0 1 2-2v-2a2 2 0 0 1-2-2 2 2 0 0 1-2 2v2a2 2 0 0 1 2 2z"></path>
+              <path d="M22 12a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2 2 2 0 0 1 2-2h2a2 2 0 0 1 2 2z"></path>
+              <path d="M2 12a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2 2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"></path>
+              <rect x="7" y="7" width="10" height="10" rx="3"></rect>
+            </svg>
+          </div>
+          <div class="chat-meta">
+            <span class="name">Certina AI Deal Agent</span>
+            <span class="status">Online</span>
+          </div>
+        </div>
+        <button class="close-chat" onclick="toggleChat()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div id="chat-messages" class="chat-messages">
+        <div class="msg bot">
+          <div class="bubble">
+            Hello. I am your Certina AI Deal Agent. I can analyze financial reports to identify distress and carve-out
+            signals.<br><br>
+            Try asking: <em>"Which companies show carve-out signals?"</em>
+          </div>
+        </div>
+      </div>
+      <form id="chat-form" class="chat-input-area" onsubmit="sendChat(event)">
+        <input type="text" id="chat-input" placeholder="Ask a question..." autocomplete="off">
+        <button type="submit" class="send-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Mobile Bottom Navigation ── -->
+  <nav class="mobile-nav mobile-only">
+    <a href="javascript:void(0)" class="mobile-nav-item active" onclick="showDashboard(); return false;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"></rect>
+        <rect x="14" y="3" width="7" height="7"></rect>
+        <rect x="14" y="14" width="7" height="7"></rect>
+        <rect x="3" y="14" width="7" height="7"></rect>
+      </svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="javascript:void(0)" class="mobile-nav-item" onclick="showCompaniesTab(); return false;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+        <circle cx="9" cy="7" r="4"></circle>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+      </svg>
+      <span>Companies</span>
+    </a>
+    <a href="javascript:void(0)" class="mobile-nav-item" onclick="toggleChat(); return false;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span>AI Analyst</span>
+    </a>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

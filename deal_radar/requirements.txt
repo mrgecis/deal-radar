@@ -1,0 +1,11 @@
+requests
+beautifulsoup4
+playwright
+pypdf
+pdf2image
+pytesseract
+tqdm
+pandas
+chromadb
+openai
+tiktoken

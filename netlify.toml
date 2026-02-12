@@ -1,0 +1,30 @@
+[build]
+  publish = "deal_radar/webapp"
+  command = "echo 'No build required - serving static files'"
+
+[dev]
+  directory = "deal_radar/webapp"
+  port = 8000
+  command = "python3 server.py 8000"
+
+# Redirect all API requests to the Python server
+[[redirects]]
+  from = "/api/*"
+  to = "/:splat"
+  status = 200
+
+# Cache headers for static assets
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
