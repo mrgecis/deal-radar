@@ -1,5 +1,12 @@
 /* ─── Certina AI Deal Agent – App Logic (Premium Financial UI) ──────────────── */
 
+// ── API Configuration ──────────────────────────────────────────────────────
+// For local development: http://localhost:8000
+// For production: set via environment variable or update directly
+const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8000'
+  : (window.__API_BASE_URL__ || '');
+
 const HIT_TYPE_LABELS = {
   carve_out: 'Carve-out / Divestment',
   loss_stress: 'Financial Distress',
@@ -51,8 +58,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const [compRes, statsRes] = await Promise.all([
-      fetch('/api/companies'),
-      fetch('/api/stats'),
+      fetch(API_BASE_URL + '/api/companies'),
+      fetch(API_BASE_URL + '/api/stats'),
     ]);
     companies = await compRes.json();
     const stats = await statsRes.json();
@@ -213,7 +220,7 @@ async function openDetail(companyId) {
 
   // Load Evidence
   try {
-    const res = await fetch('/api/evidence?company=' + companyId);
+    const res = await fetch(API_BASE_URL + '/api/evidence?company=' + companyId);
     const evidence = await res.json();
     renderEvidence(evidence, c.name);
   } catch (e) {
@@ -277,7 +284,7 @@ async function checkRelevance(companyId) {
   output.innerHTML = '<div style="font-size:13px;color:var(--text-secondary);">AI is analyzing signal relevance...</div>';
 
   try {
-    const res = await fetch('/api/relevance?company=' + companyId);
+    const res = await fetch(API_BASE_URL + '/api/relevance?company=' + companyId);
     const data = await res.json();
 
     // Simple verification result
@@ -302,7 +309,7 @@ async function generateReport(companyId) {
   output.innerHTML = '<div style="font-size:13px;color:var(--text-secondary);">Generating executive summary...</div>';
 
   try {
-    const res = await fetch('/api/report?company=' + companyId);
+    const res = await fetch(API_BASE_URL + '/api/report?company=' + companyId);
     const data = await res.json();
 
     output.innerHTML = `
@@ -333,7 +340,7 @@ async function sendChat(event) {
   const loadingId = appendMsg('bot', 'Analyzing...');
 
   try {
-    const res = await fetch('/api/chat', {
+    const res = await fetch(API_BASE_URL + '/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: msg })
@@ -381,7 +388,7 @@ async function addCompanyByName() {
   btnSpinner.style.display = 'inline';
 
   try {
-    const res = await fetch('/api/recognize-company', {
+    const res = await fetch(API_BASE_URL + '/api/recognize-company', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ company_name: companyName }),
@@ -425,7 +432,7 @@ async function addCompanyByName() {
 
 async function refreshTaskList() {
   try {
-    const res = await fetch('/api/tasks');
+    const res = await fetch(API_BASE_URL + '/api/tasks');
     const data = await res.json();
     const tasks = data.tasks || [];
 
@@ -500,7 +507,7 @@ async function searchIntelligence() {
 
   try {
     // Use the AI Chat API to search across all companies
-    const res = await fetch('/api/chat', {
+    const res = await fetch(API_BASE_URL + '/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: query }),
